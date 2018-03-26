@@ -162,3 +162,42 @@ error = 0
 
 for (x, y) in zip(x_data, y_label):
     print("X=" + str(x) + ", Y=" + str(y))
+
+    # predicted value
+    y_hat = m * x + b
+
+    # cost function
+    error += (y - y_hat) ** 2
+
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
+train = optimizer.minimize(error)
+
+init = tf.global_variables_initializer()
+
+with tf.Session() as sess:
+    sess.run(init)
+
+    training_steps = 100
+
+    for i in range(training_steps):
+        sess.run(train)
+
+    final_slope, final_intercept = sess.run([m, b])
+
+print("Final slope = " + str(final_slope) + ", final_intercept = " + str(final_intercept))
+
+from sklearn import linear_model
+lr = linear_model.LinearRegression()
+lr.fit(x_data.reshape(-1, 1), y_label.reshape(-1, 1))
+print('LR parameters: ' + str(lr.coef_) + ", " + str(lr.intercept_))
+
+
+x_test = np.linspace(-1, 11, 10)
+
+y_pred_plot = final_slope * x_test + final_intercept
+
+plt.plot(x_test, y_pred_plot, 'r')
+plt.plot(x_data, y_label, '*')
+plt.show()
+
+

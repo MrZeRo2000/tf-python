@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 
 # Part 1
 
-diabetes = pd.read_csv('data/diabetes.csv', delimiter=';')
+diabetes = pd.read_csv('../data/diabetes.csv', delimiter=';')
 
 cols_to_norm = ['Number_pregnant', 'Glucose_concentration', 'Blood_pressure', 'Triceps',
        'Insulin', 'BMI', 'Pedigree']

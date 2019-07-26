@@ -7,7 +7,7 @@ from sklearn.metrics import mean_squared_error
 
 """DATA"""
 
-housing = pd.read_csv("data/cal_housing_clean.csv")
+housing = pd.read_csv("../data/cal_housing_clean.csv")
 
 y_val = housing["medianHouseValue"]
 x_data = housing.drop("medianHouseValue", axis=1)

@@ -10,7 +10,7 @@ hello = tf.constant("Hello")
 print(type(hello))
 print(hello)
 
-with tf.Session() as sess:
+with tf.compat.v1.Session() as sess:
     result = sess.run(hello)
 
 print(result)
@@ -20,7 +20,7 @@ print("TF constants")
 a = tf.constant(1)
 b = tf.constant(2)
 
-with tf.Session() as sess:
+with tf.compat.v1.Session() as sess:
     result = sess.run(a + b)
 
 print(result)
@@ -29,7 +29,7 @@ print("TF fill_mat")
 
 fill_mat = tf.fill([4, 4], 9)
 
-with tf.Session() as sess:
+with tf.compat.v1.Session() as sess:
     result = sess.run(fill_mat)
     print("fill_mat")
     print(type(result))
@@ -42,7 +42,7 @@ with tf.Session() as sess:
 
 print("TF matmul")
 
-with tf.Session() as sess:
+with tf.compat.v1.Session() as sess:
     a = tf.constant([[1, 2], [3, 4]])
     b = tf.constant([[5], [6]])
 
@@ -60,40 +60,40 @@ n1 = tf.constant(1)
 n2 = tf.constant(2)
 n3 = n1 + n2
 
-with tf.Session() as sess:
+with tf.compat.v1.Session() as sess:
     result = sess.run(n3)
     print(result)
 
 graph_two = tf.Graph()
 
 with graph_two.as_default():
-    print(graph_two is tf.get_default_graph())
+    print(graph_two is tf.compat.v1.get_default_graph())
 
-print(graph_two is tf.get_default_graph())
+print(graph_two is tf.compat.v1.get_default_graph())
 
 print("TF variables")
 
-with tf.Session() as sess:
-    my_tensor = tf.random_uniform((4,4), 0, 1)
+with tf.compat.v1.Session() as sess:
+    my_tensor = tf.random.uniform((4,4), 0, 1)
     my_var = tf.Variable(initial_value=my_tensor)
 
     # fails because variables need to be initialized
     # sess.run(my_var)
 
-    init = tf.global_variables_initializer()
+    init = tf.compat.v1.global_variables_initializer()
     sess.run(init)
     result = sess.run(my_var)
     print(result)
 
 print("TF placeholders")
 
-with tf.Session() as sess:
-    ph = tf.placeholder(tf.float32, shape=(None,5))
+with tf.compat.v1.Session() as sess:
+    ph = tf.compat.v1.placeholder(tf.float32, shape=(None,5))
 
 print("TF linear NN")
 
 np.random.seed(101)
-tf.set_random_seed(101)
+tf.compat.v1.set_random_seed(101)
 
 rand_a = np.random.uniform(0, 100, (5, 5))
 rand_b = np.random.uniform(0, 100, (5, 1))
@@ -104,7 +104,7 @@ b = tf.placeholder(tf.float32)
 add_op = a + b
 mul_op = a * b
 
-with tf.Session() as sess:
+with tf.compat.v1.Session() as sess:
     print("add_result")
     add_result = sess.run(add_op, feed_dict={a:rand_a, b:rand_b})
     print(add_result)
@@ -117,7 +117,7 @@ print("Example Neural Network")
 n_features = 10
 n_dense_neurons = 3
 
-x = tf.placeholder(tf.float32, (None, n_features))
+x = tf.compat.v1.placeholder(tf.float32, (None, n_features))
 W = tf.Variable(tf.random_normal([n_features, n_dense_neurons]))
 b = tf.Variable(tf.ones([n_dense_neurons]))
 
@@ -128,9 +128,9 @@ z = tf.add(xW, b)
 # activation
 a = tf.sigmoid(z)
 
-init = tf.global_variables_initializer()
+init = tf.compat.v1.global_variables_initializer()
 
-with tf.Session() as sess:
+with tf.compat.v1.Session() as sess:
     sess.run(init)
 
     print("b")
@@ -169,12 +169,12 @@ for (x, y) in zip(x_data, y_label):
     # cost function
     error += (y - y_hat) ** 2
 
-optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
+optimizer = tf.compat.v1.train.GradientDescentOptimizer(learning_rate=0.001)
 train = optimizer.minimize(error)
 
-init = tf.global_variables_initializer()
+init = tf.compat.v1.global_variables_initializer()
 
-with tf.Session() as sess:
+with tf.compat.v1.Session() as sess:
     sess.run(init)
 
     training_steps = 100

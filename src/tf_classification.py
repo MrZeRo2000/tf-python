@@ -44,20 +44,20 @@ X_train, X_test, y_train, y_test = train_test_split(x_data, labels, test_size=0.
 
 # Part 2
 
-input_func = tf.estimator.inputs.pandas_input_fn(x=X_train, y=y_train,
+input_func = tf.compat.v1.estimator.inputs.pandas_input_fn(x=X_train, y=y_train,
                                                  batch_size=10, num_epochs=1000, shuffle=True)
-model = tf.estimator.LinearClassifier(feature_columns=feat_cols, n_classes=2)
+model = tf.compat.v1.estimator.LinearClassifier(feature_columns=feat_cols, n_classes=2)
 model.train(input_fn=input_func, steps=1000)
 
 # evaluate accuracy
-eval_input_func = tf.estimator.inputs.pandas_input_fn(x=X_test, y=y_test,
+eval_input_func = tf.compat.v1.estimator.inputs.pandas_input_fn(x=X_test, y=y_test,
                                                       batch_size=10, num_epochs=1, shuffle=False)
 
 results = model.evaluate(eval_input_func)
 print(results)
 
 # prediction on new data
-pred_input_func = tf.estimator.inputs.pandas_input_fn(x=X_test,
+pred_input_func = tf.compat.v1.estimator.inputs.pandas_input_fn(x=X_test,
                                                       batch_size=10, num_epochs=1, shuffle=False)
 
 predictions = model.predict(pred_input_func)
@@ -79,15 +79,15 @@ feat_cols = [num_preg, plasma_gluc, dias_press, tricep, insulin, bmi, diabets_pe
              embedded_group_col, age_bucket]
 
 
-input_func = tf.estimator.inputs.pandas_input_fn(x=X_train, y=y_train,
+input_func = tf.compat.v1.estimator.inputs.pandas_input_fn(x=X_train, y=y_train,
                                                  batch_size=10, num_epochs=1000, shuffle=True)
 
-dnn_model = tf.estimator.DNNClassifier(hidden_units=[10, 10, 10], feature_columns=feat_cols,
+dnn_model = tf.compat.v1.estimator.DNNClassifier(hidden_units=[10, 10, 10], feature_columns=feat_cols,
                                        n_classes=2)
 
 dnn_model.train(input_fn=input_func, steps=1000)
 
-eval_input_func = tf.estimator.inputs.pandas_input_fn(x=X_test, y=y_test,
+eval_input_func = tf.compat.v1.estimator.inputs.pandas_input_fn(x=X_test, y=y_test,
                                                       batch_size=10, num_epochs=1, shuffle=False)
 
 dnn_results = dnn_model.evaluate(eval_input_func)

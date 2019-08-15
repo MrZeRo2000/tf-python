@@ -14,7 +14,7 @@ y_df = pd.DataFrame(data=y_true, columns=['Y'])
 
 my_data = pd.concat([x_df, y_df], axis=1)
 
-my_data.sample(n=250).plot(kind='scatter', x = 'X Data', y = 'Y')
+my_data.sample(n=250).plot(kind='scatter', x='X Data', y='Y')
 
 batch_size = 10
 
@@ -23,19 +23,19 @@ rnd = np.random.rand(2)
 m = tf.Variable(rnd[0], dtype=tf.float32)
 b = tf.Variable(rnd[1], dtype=tf.float32)
 
-xph = tf.placeholder(tf.float32, [batch_size])
-yph = tf.placeholder(tf.float32, [batch_size])
+xph = tf.compat.v1.placeholder(tf.float32, [batch_size])
+yph = tf.compat.v1.placeholder(tf.float32, [batch_size])
 
 y_model = m * xph + b
 
 error = tf.reduce_sum(tf.square(yph - y_model))
 
-optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
+optimizer = tf.compat.v1.train.GradientDescentOptimizer(learning_rate=0.001)
 train = optimizer.minimize(error)
 
-init = tf.global_variables_initializer()
+init = tf.compat.v1.global_variables_initializer()
 
-with tf.Session() as sess:
+with tf.compat.v1.Session() as sess:
     sess.run(init)
 
     batches = 10000
@@ -61,16 +61,16 @@ plt.show()
 """TF estimator"""
 
 feat_cols = [tf.feature_column.numeric_column('x', shape=[1])]
-estimator = tf.estimator.LinearRegressor(feature_columns=feat_cols)
+estimator = tf.compat.v1.estimator.LinearRegressor(feature_columns=feat_cols)
 
 from sklearn.model_selection import train_test_split
 x_train, x_eval, y_train, y_eval = train_test_split(x_data, y_true, test_size=0.3, random_state=101)
 
-input_func = tf.estimator.inputs.numpy_input_fn({'x': x_train}, y_train,
+input_func = tf.compat.v1.estimator.inputs.numpy_input_fn({'x': x_train}, y_train,
                                                 batch_size=8, num_epochs=None, shuffle=True)
-train_input_func = tf.estimator.inputs.numpy_input_fn({'x': x_train}, y_train,
+train_input_func = tf.compat.v1.estimator.inputs.numpy_input_fn({'x': x_train}, y_train,
                                                       batch_size=8, num_epochs=1000, shuffle=False)
-eval_input_func = tf.estimator.inputs.numpy_input_fn({'x': x_eval}, y_eval,
+eval_input_func = tf.compat.v1.estimator.inputs.numpy_input_fn({'x': x_eval}, y_eval,
                                                       batch_size=8, num_epochs=1000, shuffle=False)
 
 estimator.train(input_fn=input_func, steps=1000)
@@ -84,7 +84,7 @@ print('Eval metrics')
 print(eval_metrics)
 
 brand_new_data = np.linspace(0, 10, 10)
-predict_input_func = tf.estimator.inputs.numpy_input_fn({'x': brand_new_data}, shuffle=False)
+predict_input_func = tf.compat.v1.estimator.inputs.numpy_input_fn({'x': brand_new_data}, shuffle=False)
 
 predictions = []
 for pred in estimator.predict(input_fn=predict_input_func):

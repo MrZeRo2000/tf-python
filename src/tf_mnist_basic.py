@@ -67,6 +67,7 @@ y_test = tf.one_hot(y_test, 10)
 # plt.imshow(single_image, cmap='gist_gray')
 # plt.show()
 
+# Version 2: warning free
 
 # placeholders
 x2 = tf.compat.v1.placeholder(tf.float32, (None, 784))

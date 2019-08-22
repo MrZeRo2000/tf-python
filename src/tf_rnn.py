@@ -158,3 +158,45 @@ plt.xlabel("TIME")
 plt.legend()
 plt.tight_layout()
 plt.show()
+
+# ****************
+# Generating new sequence instead of only one point
+# ****************
+
+with tf.compat.v1.Session() as sess:
+    saver.restore(sess, "./rnn_time_series_model_codealong")
+
+    # SEED ZEROS
+    zero_seq_seed = [0.0 for i in range(num_time_steps)]
+
+    for iteration in range(len(ts_data.x_data) - num_time_steps):
+        X_batch = np.array(zero_seq_seed[-num_time_steps:]).reshape(1, num_time_steps, 1)
+
+        y_pred = sess.run(outputs, feed_dict={X:X_batch})
+
+        zero_seq_seed.append(y_pred[0, -1, 0])
+
+plt.plot(ts_data.x_data, zero_seq_seed, 'b-')
+plt.plot(ts_data.x_data[:num_time_steps], zero_seq_seed[:num_time_steps], 'r', linewidth=3)
+plt.xlabel('TIME')
+plt.ylabel('Y')
+plt.show()
+
+with tf.compat.v1.Session() as sess:
+    saver.restore(sess, "./rnn_time_series_model_codealong")
+
+    # SEED ZEROS
+    training_instance = list(ts_data.y_true[:30])
+
+    for iteration in range(len(training_instance) - num_time_steps):
+        X_batch = np.array(training_instance[-num_time_steps:]).reshape(1, num_time_steps, 1)
+
+        y_pred = sess.run(outputs, feed_dict={X:X_batch})
+
+        training_instance.append(y_pred[0, -1, 0])
+
+plt.plot(ts_data.x_data, ts_data.y_true, 'b-')
+plt.plot(ts_data.x_data[:num_time_steps], training_instance[:num_time_steps], 'r', linewidth=3)
+plt.xlabel('TIME')
+plt.ylabel('Y')
+plt.show()
